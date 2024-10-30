@@ -5,6 +5,7 @@ import { BugPreview } from './BugPreview.jsx'
 export function BugList({ bugs, onRemoveBug, onEditBug }) {
 
     if (!bugs) return <div>Loading...</div>
+    
     return (
         <ul className="bug-list">
             {bugs.map((bug) => (

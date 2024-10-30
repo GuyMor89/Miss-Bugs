@@ -28,8 +28,6 @@ function remove(bugID) {
 }
 
 function save(bugToSave) {
-    console.log(bugToSave)
-
     if (bugToSave._id) {
         const bugIDx = bugs.findIndex(bug => bug._id === bugToSave._id)
         bugs[bugIDx] = bugToSave
@@ -37,7 +35,6 @@ function save(bugToSave) {
         bugToSave._id = utilService.makeId()
         bugs.unshift(bugToSave)
     }
-
     return _saveBugsToFile()
         .then(() => bugToSave)
 }

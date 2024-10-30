@@ -6,13 +6,19 @@ const { useState, useEffect } = React
 
 export function BugIndex() {
     const [bugs, setBugs] = useState(null)
+    const [filterBy, setFilterBy] = useState({text: ''})
 
     useEffect(() => {
         loadBugs()
-    }, [])
+    }, [filterBy])
 
     function loadBugs() {
-        bugService.query().then(setBugs)
+        bugService.query(filterBy)
+            .then(setBugs)
+    }
+
+    function filterBugs(event) {
+        setFilterBy({text: event.target.value})
     }
 
     function onRemoveBug(bugID) {
@@ -34,6 +40,7 @@ export function BugIndex() {
         const bug = {
             title: prompt('Bug title?'),
             severity: +prompt('Bug severity?'),
+            description: prompt('Bug description')
         }
         bugService
             .save(bug)
@@ -50,7 +57,8 @@ export function BugIndex() {
 
     function onEditBug(bug) {
         const severity = +prompt('New severity?')
-        const bugToSave = { ...bug, severity }
+        const description = prompt('New Description?')
+        const bugToSave = { ...bug, severity, description }
         bugService
             .save(bugToSave)
             .then((savedBug) => {
@@ -71,6 +79,7 @@ export function BugIndex() {
         <main>
             <section className='info-actions'>
                 <h3>Bugs App</h3>
+                <input type='search' onChange={filterBugs} placeholder='Search bugs..'></input>
                 <button onClick={onAddBug}>Add Bug ⛐</button>
             </section>
             <main>

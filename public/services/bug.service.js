@@ -13,13 +13,20 @@ export const bugService = {
 }
 
 
-function query() {
+function query(filterBy) {
     return axios.get(BASE_URL)
         .then(res => res.data)
+        .then(bugs => bugs.filter(bug => bug.title.includes(filterBy.text)))
 }
 function getById(bugID) {
     return axios.get(BASE_URL + bugID)
         .then(res => res.data)
+        .catch(err => {
+            if (err.response && err.response.status === 401) {
+                console.log('Wait for a bit')
+            }
+            throw err
+        })
 }
 
 function remove(bugID) {
@@ -28,7 +35,8 @@ function remove(bugID) {
 }
 
 function save(bug) {
-    return axios.get(BASE_URL + 'save' + `?title=${encodeURIComponent(bug.title)}&severity=${bug.severity}&_id=${bug._id || ''}`)
+    console.log(bug)
+    return axios.get(BASE_URL + 'save' + `?title=${encodeURIComponent(bug.title)}&severity=${bug.severity}&_id=${bug._id || ''}&description=${bug.description}`)
         .then(res => res.data)
 }
 
