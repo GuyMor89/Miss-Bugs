@@ -14,12 +14,19 @@ app.listen(3030, () => console.log('Server ready at port 3030'))
 app.get('/favicon.ico', (req, res) => res.status(204))
 
 app.get('/api/bug', (req, res) => {
-    bugService.query()
+
+    const filterBy = {text: req.query.text}
+    
+    bugService.query(filterBy)
         .then(bugs => res.send(bugs))
         .catch(err => {
             // loggerService.error('Cannot get bugs', err)
             res.status(500).send('Cannot get bugs')
         })
+})
+
+app.get('/api/bug/pdf', (req, res) => {
+    bugService.setupPDF()
 })
 
 app.get('/api/bug/save', (req, res) => {
@@ -70,4 +77,3 @@ app.get('/api/bug/:bugID/remove', (req, res) => {
             res.status(500).send('Cannot get bug')
         })
 })
-

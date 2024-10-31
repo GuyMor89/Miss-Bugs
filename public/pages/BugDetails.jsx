@@ -30,7 +30,7 @@ export function BugDetails() {
         <h3>Bug Details 🐛</h3>
         <h4>{title}</h4>
         <h5>{description}</h5>
-        <p>Severity: <span>{severity}</span></p>
+        <h6>Severity: <span>{severity}</span></h6>
         <Link to="/bug">Back to List</Link>
     </div>)
 

@@ -9,9 +9,8 @@ export function AppFooter () {
 
     return (
         <footer>
-            <p>
-                coffeerights to all
-            </p>
+            <p><i className="fa-solid fa-copyright"></i></p>
+            <p>CoffeeRights</p>
         </footer>
     )
 

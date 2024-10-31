@@ -1,4 +1,6 @@
 import fs from 'fs'
+import PDFDocument from 'pdfkit-table'
+
 import { utilService } from './util.service.js'
 
 const bugs = utilService.readJsonFile('data/bugs.json')
@@ -7,11 +9,12 @@ export const bugService = {
     query,
     getById,
     remove,
-    save
+    save,
+    setupPDF
 }
 
-function query() {
-    return Promise.resolve(bugs)
+function query(filterBy) {
+    return Promise.resolve(bugs.filter(bug => bug.title.includes(filterBy.text)))
 }
 
 function getById(bugID) {
@@ -50,3 +53,29 @@ function _saveBugsToFile() {
         })
     })
 }
+
+function setupPDF() {
+    let doc = new PDFDocument({ margin: 30, size: 'A4' })
+
+    function parseBugs() {
+        let newBugs = bugs.map(({ title, description, severity }) => {
+            return [title, description, severity]
+        })
+        return newBugs
+    }
+
+    doc.pipe(fs.createWriteStream('./bugs.pdf'))
+
+    createPdf(doc)
+        .then(() => doc.end())
+
+    function createPdf() {
+        const table = {
+            title: 'Bugs',
+            headers: ['Title', 'Description', 'Severity'],
+            rows: parseBugs(),
+        }
+        return doc.table(table, { columnsSize: [125, 250, 50] })
+    }
+}
+

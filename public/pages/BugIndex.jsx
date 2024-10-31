@@ -6,7 +6,7 @@ const { useState, useEffect } = React
 
 export function BugIndex() {
     const [bugs, setBugs] = useState(null)
-    const [filterBy, setFilterBy] = useState({text: ''})
+    const [filterBy, setFilterBy] = useState({ text: '' })
 
     useEffect(() => {
         loadBugs()
@@ -18,7 +18,7 @@ export function BugIndex() {
     }
 
     function filterBugs(event) {
-        setFilterBy({text: event.target.value})
+        setFilterBy({ text: event.target.value })
     }
 
     function onRemoveBug(bugID) {
@@ -80,11 +80,12 @@ export function BugIndex() {
             <section className='info-actions'>
                 <h3>Bugs App</h3>
                 <input type='search' onChange={filterBugs} placeholder='Search bugs..'></input>
-                <button onClick={onAddBug}>Add Bug ⛐</button>
+                <button onClick={onAddBug}>Add Bug</button>
             </section>
             <main>
                 <BugList bugs={bugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
             </main>
+            <button className='pdf-button' onClick={() => { bugService.downloadPDF(); showSuccessMsg('PDF Downloaded') }}>Download PDF</button>
         </main>
     )
 }

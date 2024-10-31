@@ -10,14 +10,15 @@ export const bugService = {
     getById,
     save,
     remove,
+    downloadPDF
 }
 
 
 function query(filterBy) {
-    return axios.get(BASE_URL)
+    return axios.get(BASE_URL + `?text=${encodeURIComponent(filterBy.text)}`)
         .then(res => res.data)
-        .then(bugs => bugs.filter(bug => bug.title.includes(filterBy.text)))
 }
+
 function getById(bugID) {
     return axios.get(BASE_URL + bugID)
         .then(res => res.data)
@@ -35,8 +36,12 @@ function remove(bugID) {
 }
 
 function save(bug) {
-    console.log(bug)
     return axios.get(BASE_URL + 'save' + `?title=${encodeURIComponent(bug.title)}&severity=${bug.severity}&_id=${bug._id || ''}&description=${bug.description}`)
+        .then(res => res.data)
+}
+
+function downloadPDF() {
+    return axios.get(BASE_URL + 'pdf')
         .then(res => res.data)
 }
 
