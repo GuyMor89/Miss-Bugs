@@ -77,6 +77,10 @@ main {
 }
 
 .container>main {
+    display: grid;
+
+    grid-template-rows: 0.5fr 0.25fr 1fr 0.25fr;
+
     width: 100%;
     height: 100%;
 }
@@ -87,7 +91,7 @@ main {
     justify-items: center;
     gap: 0.5em;
 
-    width: 50%;
+    width: 75%;
 }
 
 .info-actions>h3 {
@@ -97,8 +101,20 @@ main {
     font-size: 1.5em;
 }
 
-.info-actions>input {
-    width: 50%;
+.info-actions>form>fieldset {
+    padding: 0.25em 0.5em;
+
+    display: grid;
+    place-items: center;
+    grid-auto-flow: column;
+
+    width: 100%;
+
+    border-radius: 5px;
+}
+
+.info-actions>form>fieldset>input {
+    /* width: 50%; */
     height: 25px;
 
     border-radius: 3px;
@@ -107,11 +123,82 @@ main {
     border: 2px solid hsl(0, 0%, 75%);
 }
 
+.info-actions>form>fieldset>label {
+    height: fit-content;
+}
+
+.info-actions>form>fieldset>input[type="range"] {
+    cursor: pointer;
+}
+
 .info-actions>button {
     padding: 0.25em 0.5em;
 
     border-radius: 4px;
     border: 2px solid hsl(0, 0%, 75%);
+}
+
+.bug-list-counter {
+    display: grid;
+    grid-auto-flow: column;
+
+    font-size: 1.5em;
+    margin-block-start: 1.25em;
+    margin-block-end: 0.5em;
+
+    height: fit-content;
+}
+
+.bug-list-counter>div {
+    padding: 0.5em 0.5em;
+    margin-inline-end: 1em;
+
+    place-self: center;
+
+    display: grid;
+    grid-auto-flow: column;
+    place-items: center;
+    gap: 0.25em;
+
+    height: fit-content;
+
+    background-color: hsl(0, 0%, 93%);
+    border-radius: 100px;
+    border: 1px solid hsl(0, 0%, 100%);
+
+    font-size: 0.6em;
+
+    transition: border 200ms;
+
+    cursor: pointer;
+}
+
+.bug-list-counter>div:hover {
+    border: 1px solid hsl(0, 0%, 35%);
+}
+
+.bug-list-counter>i {
+    padding: 0.5em;
+
+    min-width: 25px;
+
+    text-align: center;
+    border-radius: 9999px;
+
+    cursor: pointer;
+
+    transition: background-color 200ms;
+}
+
+.bug-list-counter>i:hover {
+    background-color: hsl(0, 0%, 93%);
+}
+
+.bug-list-counter>i.faint,
+.bug-list-counter>i:hover.faint {
+    cursor: auto;
+    background-color: white;
+    pointer-events: none;
 }
 
 .user-msg {
@@ -144,9 +231,11 @@ main {
     list-style: none;
 
     padding: 0;
+    margin: 0;
+    margin-block-end: 1em;
 
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 200px);
 }
 
 .bug-preview {
@@ -155,6 +244,8 @@ main {
 
     background-color: hsl(0, 0%, 20%);
     color: hsl(0, 0%, 100%);
+    border: 3px solid hsl(0, 0%, 50%);
+
     border-radius: 5px;
     text-align: center;
 }
@@ -221,6 +312,8 @@ main {
 }
 
 .pdf-button {
+    align-self: end;
+
     margin-block-end: 1em;
 
     padding: 0.25em 0.5em;
@@ -228,7 +321,7 @@ main {
     border-radius: 4px;
     border: 2px solid hsl(0, 0%, 75%);
     background-color: white;
-    
+
     cursor: pointer;
 
     transition: border 200ms;
@@ -304,10 +397,10 @@ footer>p:first-of-type {
     justify-self: end;
 
     margin: 0;
-    
+
     font-size: 1.25em;
 }
 
-footer>p:nth-of-type(2){
+footer>p:nth-of-type(2) {
     justify-self: start;
 }

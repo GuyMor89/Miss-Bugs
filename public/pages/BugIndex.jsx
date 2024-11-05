@@ -6,7 +6,7 @@ const { useState, useEffect } = React
 
 export function BugIndex() {
     const [bugs, setBugs] = useState(null)
-    const [filterBy, setFilterBy] = useState({ text: '' })
+    const [filterBy, setFilterBy] = useState({ text: '', minSeverity: 0, page: 0,  sort: { severity: '', title: '', createdAt: '' }})
 
     useEffect(() => {
         loadBugs()
@@ -18,7 +18,12 @@ export function BugIndex() {
     }
 
     function filterBugs(event) {
-        setFilterBy({ text: event.target.value })
+        const form = event.target.form
+
+        const searchValue = form.search.value
+        const minSeverity = form['min-severity'].value
+
+        setFilterBy({ ...filterBy, text: searchValue, minSeverity: minSeverity })
     }
 
     function onRemoveBug(bugID) {
@@ -57,7 +62,8 @@ export function BugIndex() {
 
     function onEditBug(bug) {
         const severity = +prompt('New severity?')
-        const description = prompt('New Description?')
+        const description = prompt('New Description?') || bug.description
+
         const bugToSave = { ...bug, severity, description }
         bugService
             .save(bugToSave)
@@ -75,13 +81,39 @@ export function BugIndex() {
             })
     }
 
+    const { severity, title, createdAt } = filterBy.sort
+
     return (
         <main>
             <section className='info-actions'>
                 <h3>Bugs App</h3>
-                <input type='search' onChange={filterBugs} placeholder='Search bugs..'></input>
+                <form onChange={filterBugs}>
+                    <fieldset>
+                        <input type='search' name='search' placeholder='Search bugs..'></input>
+                        <label htmlFor="min-severity"> Min Severity</label>
+                        <input type='range' name='min-severity' min={0} value={filterBy.minSeverity} max={10}></input>
+                    </fieldset>
+                </form>
                 <button onClick={onAddBug}>Add Bug</button>
             </section>
+            <div className="bug-list-counter">
+                <div onClick={() => { severity === '' || severity === 1 ? setFilterBy({ ...filterBy, sort: { ...filterBy.sort, severity: -1 } }) : setFilterBy({ ...filterBy, sort: { ...filterBy.sort, severity: 1 } }) }}>
+                    <i className={severity === '' || severity === 1 ? "fa-solid fa-chevron-up" : "fa-solid fa-chevron-down"}></i>
+                    <span>Severity</span>
+                </div>
+                <div onClick={() => { createdAt === '' || createdAt === 1 ? setFilterBy({ ...filterBy, sort: { ...filterBy.sort, createdAt: -1 } }) : setFilterBy({ ...filterBy, sort: { ...filterBy.sort, createdAt: 1 } }) }}>
+                    <i className={createdAt === '' || createdAt === 1 ? "fa-solid fa-chevron-up" : "fa-solid fa-chevron-down"}></i>
+                    <span>Created At</span>
+                </div>
+                <div onClick={() => { title === '' || title === 1 ? setFilterBy({ ...filterBy, sort: { ...filterBy.sort, title: -1 } }) : setFilterBy({ ...filterBy, sort: { ...filterBy.sort, title: 1 } }) }}>
+                    <i className={title === '' || title === 1 ? "fa-solid fa-chevron-up" : "fa-solid fa-chevron-down"}></i>
+                    <span>Title</span>
+                </div>
+
+                {/* <span>{startNum} - {endNum} of {amountOfBugs}</span> */}
+                <i className={filterBy.page === 0 ? "fa-solid fa-angle-left faint" : "fa-solid fa-angle-left"} onClick={() => setFilterBy({ ...filterBy, page: filterBy.page - 1 })}></i>
+                <i className={filterBy.page !== 0 ? "fa-solid fa-angle-right faint" : "fa-solid fa-angle-right"} onClick={() => setFilterBy({ ...filterBy, page: filterBy.page + 1 })}></i>
+            </div>
             <main>
                 <BugList bugs={bugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
             </main>

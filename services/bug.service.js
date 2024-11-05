@@ -4,6 +4,7 @@ import PDFDocument from 'pdfkit-table'
 import { utilService } from './util.service.js'
 
 const bugs = utilService.readJsonFile('data/bugs.json')
+const PAGE_SIZE = 4
 
 export const bugService = {
     query,
@@ -14,7 +15,33 @@ export const bugService = {
 }
 
 function query(filterBy) {
-    return Promise.resolve(bugs.filter(bug => bug.title.includes(filterBy.text)))
+    let filteredBugs = bugs
+    const sort = JSON.parse(filterBy.sort)
+
+    if (filterBy.text) {
+        const regExp = new RegExp(filterBy.text, 'i')
+        filteredBugs = filteredBugs.filter(bug => regExp.test(bug.title) || bug.labels.some(label => regExp.test(label)))
+    }
+    if (filterBy.minSeverity) {
+        filteredBugs = filteredBugs.filter(bug => bug.severity >= filterBy.minSeverity)
+    }
+    if (sort && sort.severity) {
+        filteredBugs = filteredBugs.sort((a, b) => (a.severity - b.severity) * sort.severity)
+    }
+    if (sort && sort.title) {
+        filteredBugs = filteredBugs.sort((a, b) => (a.title.localeCompare(b.title)) * sort.title)
+    }
+    if (sort && sort.createdAt) {
+        filteredBugs = filteredBugs.sort((a, b) => (a.createdAt - b.createdAt) * sort.createdAt)
+    }
+    // const amountOfBugs = bugs.length
+    if (filterBy.page) {
+        const pageStart = (filterBy.page * PAGE_SIZE)
+
+        filteredBugs = filteredBugs.slice(pageStart, pageStart + PAGE_SIZE)
+    }
+
+    return Promise.resolve(filteredBugs)
 }
 
 function getById(bugID) {
@@ -30,12 +57,34 @@ function remove(bugID) {
     return _saveBugsToFile()
 }
 
-function save(bugToSave) {
-    if (bugToSave._id) {
-        const bugIDx = bugs.findIndex(bug => bug._id === bugToSave._id)
+function save(data) {
+    let bugToSave
+
+    if (data._id) {
+        const bugIDx = bugs.findIndex(bug => bug._id === data._id)
+
+        bugToSave = {
+            _id: data._id,
+            createdAt: data.createdAt,
+            updatedAt: Date.now(),
+            title: data.title,
+            severity: +data.severity,
+            description: data.description,
+            labels: data.labels
+        }
+
         bugs[bugIDx] = bugToSave
+
     } else {
-        bugToSave._id = utilService.makeId()
+        bugToSave = {
+            _id: utilService.makeId(),
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+            title: data.title,
+            severity: +data.severity,
+            description: data.description,
+        }
+
         bugs.unshift(bugToSave)
     }
     return _saveBugsToFile()

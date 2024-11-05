@@ -15,7 +15,7 @@ export const bugService = {
 
 
 function query(filterBy) {
-    return axios.get(BASE_URL + `?text=${encodeURIComponent(filterBy.text)}`)
+    return axios.get(BASE_URL, { params: filterBy })
         .then(res => res.data)
 }
 
@@ -31,13 +31,29 @@ function getById(bugID) {
 }
 
 function remove(bugID) {
-    return axios.get(BASE_URL + bugID + '/remove')
+    return axios.delete(BASE_URL + bugID)
         .then(res => res.data)
 }
 
 function save(bug) {
-    return axios.get(BASE_URL + 'save' + `?title=${encodeURIComponent(bug.title)}&severity=${bug.severity}&_id=${bug._id || ''}&description=${bug.description}`)
-        .then(res => res.data)
+    console.log(bug)
+    // return axios.get(BASE_URL + 'save' + `?title=${encodeURIComponent(bug.title)}&severity=${bug.severity}&_id=${bug._id || ''}&description=${bug.description}`)
+    if (bug._id) {
+        return axios.put(BASE_URL + bug._id, bug)
+            .then(res => res.data)
+            .catch(err => {
+                console.log('err:', err)
+                throw err
+            })
+    } else {
+        return axios.post(BASE_URL, bug)
+            .then(res => res.data)
+            .catch(err => {
+                console.log('err:', err)
+                throw err
+            })
+    }
+
 }
 
 function downloadPDF() {

@@ -1,58 +1,67 @@
 [
     {
         "_id": "abc123",
+        "createdAt": 1542107359454,
+        "updatedAt": 1730728403802,
         "title": "Infinite Loop Detected",
+        "severity": 9,
         "description": "The program enters an infinite loop and fails to terminate.",
-        "severity": 3,
-        "createdAt": 1542107359454
+        "labels": ["critical", "bug", "in-progress"]
     },
     {
         "_id": "lma112",
         "title": "Cannot Save",
         "description": "The application fails to save user data, causing potential data loss.",
         "severity": 4,
-        "createdAt": 1542107859454
+        "createdAt": 1542107859454,
+        "labels": ["feature", "high-priority", "needs-review"]
     },
     {
         "_id": "def456",
         "title": "Keyboard Not Found",
         "description": "The operating system does not detect the keyboard, making input impossible.",
         "severity": 3,
-        "createdAt": 1542107959454
+        "createdAt": 1542107959454,
+        "labels": ["enhancement", "low-priority"]
     },
     {
         "_id": "ghi012",
         "title": "Unexpected Response",
         "description": "The server responds with an unrecognized status, disrupting normal operations.",
         "severity": 2,
-        "createdAt": 1542108059454
+        "createdAt": 1542108059454,
+        "labels": ["QA-passed", "documentation", "completed"]
     },
     {
         "_id": "xyz789",
         "title": "Null Pointer Exception",
         "description": "An attempt to access a null object reference causes the program to crash.",
         "severity": 4,
-        "createdAt": 1542107459123
+        "createdAt": 1542107459123,
+        "labels": ["security", "waiting-for-feedback"]
     },
     {
         "_id": "pit845",
         "title": "Memory Leak",
         "description": "The application fails to release memory, causing increased memory usage over time.",
         "severity": 3,
-        "createdAt": 1542107556789
+        "createdAt": 1542107556789,
+        "labels": ["dev-branch", "UI", "blocked"]
     },
     {
         "_id": "fbg666",
         "title": "Database Connection Timeout",
         "description": "The server fails to connect to the database within the specified timeout.",
         "severity": 2,
-        "createdAt": 1542107658345
+        "createdAt": 1542107658345,
+        "labels": ["on-hold", "refactor"]
     },
     {
         "_id": "jkl345",
         "title": "Incorrect User Authentication",
         "description": "The login function fails to authenticate valid users intermittently.",
         "severity": 4,
-        "createdAt": 1542107759454
+        "createdAt": 1542107759454,
+        "labels": ["staging", "approved", "ready-for-testing", "medium-priority"]
     }
 ]
