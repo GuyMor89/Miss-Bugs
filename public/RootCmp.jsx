@@ -1,4 +1,5 @@
 const Router = ReactRouterDOM.HashRouter
+// const Router = ReactRouterDOM.BrowserRouter
 const { Route, Routes } = ReactRouterDOM
 
 import { AppHeader } from './cmps/AppHeader.jsx'
@@ -7,10 +8,14 @@ import { Home } from './pages/Home.jsx'
 import { BugIndex } from './pages/BugIndex.jsx'
 import { BugDetails } from './pages/BugDetails.jsx'
 import { AboutUs } from './pages/AboutUs.jsx'
+import { UserDetails } from './pages/UserDetails.jsx'
+import { UserList } from './pages/UserList.jsx'
+import { UserMsg } from './cmps/UserMsg.jsx'
 
 export function App() {
     return (
         <Router>
+            <UserMsg />
             <div className='main-app'>
                 <AppHeader />
                 <main className='container'>
@@ -18,7 +23,9 @@ export function App() {
                         <Route path="/" element={<Home />} />
                         <Route path="/bug" element={<BugIndex />} />
                         <Route path="/bug/:bugId" element={<BugDetails />} />
+                        <Route path="/users" element={<UserList />} />
                         <Route path="/about" element={<AboutUs />} />
+                        <Route path="/user/:userID" element={<UserDetails />} />
                     </Routes>
                 </main>
                 <AppFooter />

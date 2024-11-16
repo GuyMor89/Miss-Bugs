@@ -1,0 +1,91 @@
+Logging In:
+
+1.) LoginSignup.jsx
+
+> Sends data from the login inputs to user.service.js (public)
+
+function login(credentials) {
+	userService.login(credentials)
+}
+
+2.) user.service.js (public)
+
+> Sends an axios.post request with the data to server.js
+
+function login({ username, password }) {
+    return axios.post('/api/auth/login', { username, password })
+}
+
+3.) server.js
+
+> Sends the data to user.service.js (not public)
+
+app.post('/api/auth/login', (req, res) => {
+    const credentials = req.body
+
+    userService.checkLogin(credentials)
+}
+
+4.) user.service.js (not public)
+
+> Checks the data against the user.json file and finds the user object
+
+function checkLogin({ username, password }) {
+	var user = users.find(user => user.username === username && user.password === password)
+}	
+
+5.) server.js
+
+> Encrypts the user object, places it in a cookie and returns it to LoginSignup.jsx
+
+if (user) {
+         const loginToken = userService.getLoginToken(user)
+         res.cookie('loginToken', loginToken)
+         res.send(user)
+}
+
+
+Verifying Log In:
+
+1.) AppHeader.js
+
+> Sends a request to user.service.js (public)
+
+ useEffect(() => {
+	userService.getLoggedinUser()
+}
+
+2.) user.service.js (public)
+
+> Sends an axios.get request to the server
+
+function getLoggedinUser() {
+    return axios.get('/api/auth/verify')
+        .then(res => res.data)
+}
+
+3). server.js
+
+> Sends the contents of the cookie to user.service.js (not public)
+
+app.get('/api/auth/verify', (req,res) => {
+    const user = userService.validateToken(req.cookies.loginToken)
+
+    if (user) return res.send(user)
+})
+
+4.) user.service.js (not public)
+
+> Decrypts the contents of the cookie and returns it to the server
+
+function validateToken(token) {
+	if (!token) return null
+    
+	const str = cryptr.decrypt(token)
+	const user = JSON.parse(str)
+	return user
+}
+
+5.) server.js
+
+> Returns the decrypted user object to AppHeader.jsx

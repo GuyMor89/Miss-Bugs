@@ -1,12 +1,44 @@
 [
     {
+        "_id": "zHLwL",
+        "createdAt": 1731756011463,
+        "updatedAt": 1731756011463,
+        "title": "Mr. Dandy's Second Bug",
+        "severity": 77,
+        "description": "He has another one now",
+        "owner": {
+            "fullname": "Mr. Dandy",
+            "_id": "1iLVI"
+        }
+    },
+    {
+        "_id": "8AqtW",
+        "createdAt": 1731673770649,
+        "updatedAt": 1731758874840,
+        "title": "Mr. Dandy's Bug",
+        "severity": 14,
+        "description": "It's a bug",
+        "owner": {
+            "fullname": "Mr. Dandy",
+            "_id": "1iLVI"
+        }
+    },
+    {
         "_id": "abc123",
         "createdAt": 1542107359454,
-        "updatedAt": 1730728403802,
+        "updatedAt": 1731757292291,
         "title": "Infinite Loop Detected",
-        "severity": 9,
+        "severity": 7,
         "description": "The program enters an infinite loop and fails to terminate.",
-        "labels": ["critical", "bug", "in-progress"]
+        "labels": [
+            "critical",
+            "bug",
+            "in-progress"
+        ],
+        "owner": {
+            "fullname": "Admin",
+            "_id": "u101"
+        }
     },
     {
         "_id": "lma112",
@@ -14,7 +46,11 @@
         "description": "The application fails to save user data, causing potential data loss.",
         "severity": 4,
         "createdAt": 1542107859454,
-        "labels": ["feature", "high-priority", "needs-review"]
+        "labels": [
+            "feature",
+            "high-priority",
+            "needs-review"
+        ]
     },
     {
         "_id": "def456",
@@ -22,7 +58,10 @@
         "description": "The operating system does not detect the keyboard, making input impossible.",
         "severity": 3,
         "createdAt": 1542107959454,
-        "labels": ["enhancement", "low-priority"]
+        "labels": [
+            "enhancement",
+            "low-priority"
+        ]
     },
     {
         "_id": "ghi012",
@@ -30,7 +69,11 @@
         "description": "The server responds with an unrecognized status, disrupting normal operations.",
         "severity": 2,
         "createdAt": 1542108059454,
-        "labels": ["QA-passed", "documentation", "completed"]
+        "labels": [
+            "QA-passed",
+            "documentation",
+            "completed"
+        ]
     },
     {
         "_id": "xyz789",
@@ -38,7 +81,10 @@
         "description": "An attempt to access a null object reference causes the program to crash.",
         "severity": 4,
         "createdAt": 1542107459123,
-        "labels": ["security", "waiting-for-feedback"]
+        "labels": [
+            "security",
+            "waiting-for-feedback"
+        ]
     },
     {
         "_id": "pit845",
@@ -46,7 +92,11 @@
         "description": "The application fails to release memory, causing increased memory usage over time.",
         "severity": 3,
         "createdAt": 1542107556789,
-        "labels": ["dev-branch", "UI", "blocked"]
+        "labels": [
+            "dev-branch",
+            "UI",
+            "blocked"
+        ]
     },
     {
         "_id": "fbg666",
@@ -54,7 +104,10 @@
         "description": "The server fails to connect to the database within the specified timeout.",
         "severity": 2,
         "createdAt": 1542107658345,
-        "labels": ["on-hold", "refactor"]
+        "labels": [
+            "on-hold",
+            "refactor"
+        ]
     },
     {
         "_id": "jkl345",
@@ -62,6 +115,11 @@
         "description": "The login function fails to authenticate valid users intermittently.",
         "severity": 4,
         "createdAt": 1542107759454,
-        "labels": ["staging", "approved", "ready-for-testing", "medium-priority"]
+        "labels": [
+            "staging",
+            "approved",
+            "ready-for-testing",
+            "medium-priority"
+        ]
     }
 ]

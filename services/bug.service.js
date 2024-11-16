@@ -11,16 +11,25 @@ export const bugService = {
     getById,
     remove,
     save,
-    setupPDF
+    setupPDF,
+    hasBugs
 }
 
-function query(filterBy) {
+function query(filterBy = {}) {
     let filteredBugs = bugs
-    const sort = JSON.parse(filterBy.sort)
+    // const sort = JSON.parse(filterBy.sort)
+
+    let sort
+    try {
+        sort = JSON.parse(filterBy.sort)
+    } catch (error) {
+        console.error('Invalid JSON in filterBy.sort:', error)
+        sort = null
+    }
 
     if (filterBy.text) {
         const regExp = new RegExp(filterBy.text, 'i')
-        filteredBugs = filteredBugs.filter(bug => regExp.test(bug.title) || bug.labels.some(label => regExp.test(label)))
+        filteredBugs = filteredBugs.filter(bug => regExp.test(bug.title) || (bug.labels && bug.labels.some(label => regExp.test(label))))
     }
     if (filterBy.minSeverity) {
         filteredBugs = filteredBugs.filter(bug => bug.severity >= filterBy.minSeverity)
@@ -34,14 +43,14 @@ function query(filterBy) {
     if (sort && sort.createdAt) {
         filteredBugs = filteredBugs.sort((a, b) => (a.createdAt - b.createdAt) * sort.createdAt)
     }
-    // const amountOfBugs = bugs.length
+    const amountOfBugs = filteredBugs.length
     if (filterBy.page) {
         const pageStart = (filterBy.page * PAGE_SIZE)
 
         filteredBugs = filteredBugs.slice(pageStart, pageStart + PAGE_SIZE)
     }
 
-    return Promise.resolve(filteredBugs)
+    return Promise.resolve({ filteredBugs, amountOfBugs })
 }
 
 function getById(bugID) {
@@ -50,18 +59,28 @@ function getById(bugID) {
     return Promise.resolve(bug)
 }
 
-function remove(bugID) {
+function remove(bugID, user) {
     const bugIDx = bugs.findIndex(bug => bug._id === bugID)
     if (bugIDx < 0) return Promise.reject('Cannot find bug - ' + bugID)
+
+    if (bugs[bugIDx].owner._id !== user._id && !user.isAdmin) {
+        return Promise.reject('Not authorized to delete this bug')
+    }
+
     bugs.splice(bugIDx, 1)
     return _saveBugsToFile()
 }
 
-function save(data) {
+function save(data, user) {
     let bugToSave
 
     if (data._id) {
         const bugIDx = bugs.findIndex(bug => bug._id === data._id)
+        if (bugIDx === -1) return Promise.reject('Couldn\'t find bug ID')
+
+        if (bugs[bugIDx].owner._id !== user._id && !user.isAdmin) {
+            return Promise.reject('Not authorized to update this bug')
+        }
 
         bugToSave = {
             _id: data._id,
@@ -70,7 +89,8 @@ function save(data) {
             title: data.title,
             severity: +data.severity,
             description: data.description,
-            labels: data.labels
+            labels: data.labels,
+            owner: data.owner
         }
 
         bugs[bugIDx] = bugToSave
@@ -83,12 +103,21 @@ function save(data) {
             title: data.title,
             severity: +data.severity,
             description: data.description,
+            owner: data.owner
         }
 
         bugs.unshift(bugToSave)
     }
     return _saveBugsToFile()
         .then(() => bugToSave)
+}
+
+function hasBugs(userID) {
+    const hasBugs = bugs.some(bug => bug.owner && bug.owner._id === userID)
+
+    if (hasBugs) return Promise.reject('Cannot delete user with bugs')
+
+    return Promise.resolve()
 }
 
 function _saveBugsToFile() {

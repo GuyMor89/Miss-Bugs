@@ -22,6 +22,7 @@
     "@babel/preset-react": "^7.25.9",
     "babel-loader": "^9.2.1",
     "cookie-parser": "^1.4.7",
+    "cryptr": "^6.3.0",
     "express": "^4.21.1",
     "html-webpack-plugin": "^5.6.3",
     "pdfkit-table": "^0.1.99",

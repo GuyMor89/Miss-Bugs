@@ -1,3 +1,7 @@
+:root {
+    --button-color: hsl(32, 88%, 98%);
+}
+
 body {
     margin: auto;
 
@@ -7,7 +11,7 @@ body {
 .main-app {
     display: grid;
 
-    grid-template-rows: 125px 1fr 55px;
+    grid-template-rows: 100px 1fr 55px;
 
     min-height: 100vh;
 }
@@ -18,49 +22,50 @@ header {
     justify-items: center;
 
     border-block-end: 2px solid hsl(0, 0%, 85%);
-    background-color: hsl(205, 83%, 73%);
-
-
+    background-color: hsl(105, 24%, 77%)
 }
 
 nav {
-    padding-block-start: 0.75em;
+    margin-block-start: 0.5em;
 
     display: grid;
     grid-auto-flow: column;
 
     width: fit-content;
+    height: fit-content;
 
     place-items: center;
 }
 
 nav a,
-.container>div>a {
+.container>div>a,
+.header>div>.btns>a {
     margin: 0 0.5em;
     padding: 0.25em 0.5em;
 
     text-decoration: none;
     color: hsl(0, 0%, 0%);
-    background-color: hsl(0, 0%, 100%);
+    background-color: var(--button-color);
 
     font-family: Roboto;
     font-size: 1.1em;
     font-weight: 500;
 
     border: 2px solid hsl(0, 0%, 75%);
-    border-radius: 100px;
+    border-radius: 5px;
 
     transition: background-color 150ms, border 150ms;
 }
 
 nav a:hover,
-.container>div>a:hover {
+.container>div>a:hover,
+.header>div>.btns>a:hover {
     border: 2px solid hsl(0, 0%, 50%);
 }
 
 header>h1 {
     margin: 0.5em;
-    margin-block-start: 0.5em;
+    margin-block: 0.25em;
 
     font-family: Open Sans;
     font-size: 2em;
@@ -72,14 +77,80 @@ main {
     text-align: center;
 }
 
-.container {
-    padding-inline: 8rem;
+.header>div {
+    margin: 0.5em 0;
+    text-align: center;
+
+    display: grid;
+    grid-auto-flow: column;
+
+    place-items: center;
+
+    gap: 1em;
+}
+
+.header>div>button {
+    cursor: pointer;
+}
+
+.header>div>form {
+    display: grid;
+    grid-auto-flow: column;
+
+    gap: 0.25em;
+
+    height: 100%;
+}
+
+.header>div>form>input,
+.header>div>form>button,
+.header>section>button {
+    border-radius: 4px;
+    border: 2px solid hsl(0, 0%, 75%);
+    background-color: var(--button-color);
+
+    transition: border 150ms;
+}
+
+.header>div>form>input {
+    padding: 0 0.5em;
+    background-color: hsl(0, 0%, 100%);
+    outline: none;
+}
+
+.header>div>form>button {
+    cursor: pointer;
+}
+
+.header>section {
+    margin-block-end: 0.25em;
+
+    display: grid;
+    grid-auto-flow: column;
+    gap: 1em;
+
+    place-items: center;
+}
+
+.header>section>a {
+    text-decoration: none;
+    color: black;
+
+    font-size: 1.25em;
+}
+
+.header>section>button {
+    height: 30px;
+
+    background-color: var(--button-color);
+
+    cursor: pointer;
 }
 
 .container>main {
     display: grid;
 
-    grid-template-rows: 0.5fr 0.25fr 1fr 0.25fr;
+    grid-template-rows: 0.35fr 0.15fr 0.25fr 1fr 0.25fr;
 
     width: 100%;
     height: 100%;
@@ -87,6 +158,7 @@ main {
 
 .info-actions {
     display: grid;
+    align-self: center;
 
     justify-items: center;
     gap: 0.5em;
@@ -136,6 +208,17 @@ main {
 
     border-radius: 4px;
     border: 2px solid hsl(0, 0%, 75%);
+    background-color: var(--button-color);
+
+    cursor: pointer;
+
+    transition: border 200ms;
+}
+
+.info-actions>button:hover,
+.header>div>form>button:hover,
+.header>section>button:hover {
+    border: 2px solid hsl(0, 0%, 50%);
 }
 
 .bug-list-counter {
@@ -143,7 +226,7 @@ main {
     grid-auto-flow: column;
 
     font-size: 1.5em;
-    margin-block-start: 1.25em;
+    margin-block-start: 0.5em;
     margin-block-end: 0.5em;
 
     height: fit-content;
@@ -177,26 +260,46 @@ main {
     border: 1px solid hsl(0, 0%, 35%);
 }
 
-.bug-list-counter>i {
+.pagination {
+    margin-block: 0.5em;
+
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+
+    font-size: 1.15em;
+}
+
+.pagination>span {
+    margin-inline-end: 1em;
+
+    justify-self: start;
+
+    width: 100px;
+}
+
+.pagination>i {
     padding: 0.5em;
 
-    min-width: 25px;
+    width: 20px;
 
     text-align: center;
     border-radius: 9999px;
+    justify-self: end;
 
     cursor: pointer;
 
     transition: background-color 200ms;
 }
 
-.bug-list-counter>i:hover {
+.pagination>i:hover {
     background-color: hsl(0, 0%, 93%);
 }
 
-.bug-list-counter>i.faint,
-.bug-list-counter>i:hover.faint {
+.pagination>i.faint,
+.pagination>i:hover.faint {
     cursor: auto;
+    color: hsl(0, 0%, 75%);
     background-color: white;
     pointer-events: none;
 }
@@ -209,6 +312,7 @@ main {
     top: 0;
     right: 0;
     background-color: grey;
+    z-index: 10;
 }
 
 .user-msg button {
@@ -222,7 +326,7 @@ main {
     background-color: rgb(41, 189, 73);
 }
 
-.danger {
+.error {
     background-color: rgb(216, 59, 59);
 }
 
@@ -296,7 +400,7 @@ main {
 
     border-radius: 5px;
     border: 3px solid hsl(0, 0%, 20%);
-    background-color: hsl(0, 0%, 94%);
+    background-color: var(--button-color);
 
     font-family: Roboto;
     font-size: 1.1em;
@@ -320,7 +424,7 @@ main {
 
     border-radius: 4px;
     border: 2px solid hsl(0, 0%, 75%);
-    background-color: white;
+    background-color: var(--button-color);
 
     cursor: pointer;
 
@@ -336,6 +440,7 @@ main {
     padding: 1em;
 
     display: grid;
+    min-width: 50%;
 
     border: 2px solid hsl(0, 0%, 92%);
     border-radius: 8px;
@@ -378,7 +483,59 @@ main {
 
     justify-self: center;
 
-    width: 20%;
+    width: 100px;
+}
+
+.user-details>h2 {
+    margin: 0.35em;
+    font-size: 1.75em;
+    font-family: Open Sans;
+}
+
+.user-details>h3:not(:first-of-type) {
+    margin-block-end: 1em;
+}
+
+.user-list {
+    margin-block-start: 1em;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2em;
+}
+
+.user-list>div {
+    padding: 0 1.75em;
+
+    border: 2px solid hsl(0, 0%, 90%);
+    border-radius: 5px;
+    background-color: hsl(0, 0%, 98%);
+
+    font-size: 1.25em;
+
+    transition: background-color 150ms;
+}
+
+.user-list>div:hover {
+    background-color: hsl(0, 0%, 100%);
+}
+
+.user-list>div>button {
+    padding: 0.25em 0.5em;
+    margin-block-end: 0.5em;
+
+    background-color: var(--button-color);
+    border: 2px solid hsl(0, 0%, 75%);
+
+    border-radius: 4px;
+
+    cursor: pointer;
+
+    transition: background-color 150ms;
+}
+
+.user-list>div>button:hover {
+    background-color: hsl(0, 0%, 100%);
 }
 
 footer {
@@ -389,7 +546,7 @@ footer {
     place-items: center;
     gap: 0.5em;
 
-    background-color: hsl(205, 83%, 73%);
+    background-color: hsl(105, 24%, 77%);
     border-block-start: 2px solid hsl(0, 0%, 85%);
 }
 
