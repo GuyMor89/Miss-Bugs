@@ -111,9 +111,7 @@ export function BugIndex() {
 
     const { startNum, endNum } = handlePageNumbers()
     const { severity, title, createdAt } = filterBy.sort
-
-    if (!user) return <div>Loading..</div>
-
+    
     return (
         <main>
             <section className='info-actions'>
