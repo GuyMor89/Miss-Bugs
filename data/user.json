@@ -18,5 +18,11 @@
     "password": "dandy",
     "fullname": "Mr. Dandy",
     "_id": "1iLVI"
+  },
+  {
+    "username": "Romeo",
+    "password": "romeo",
+    "fullname": "Romeo",
+    "_id": "GnhGo"
   }
 ]

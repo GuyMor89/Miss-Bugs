@@ -111,7 +111,7 @@ app.get('/api/user', (req, res) => {
     const user = userService.validateToken(req.cookies.loginToken)
 
     if (!user) return res.status(401).send('No user logged in')
-    // if (!user.isAdmin) return res.status(401).send('Not authorized to view users')
+    if (!user.isAdmin) return res.status(401).send('Not authorized to view users')
 
     userService.query()
         .then(users => res.send(users))

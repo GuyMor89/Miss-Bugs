@@ -21,11 +21,11 @@ function query(filterBy = {}) {
 
     let sort
     try {
-        sort = JSON.parse(filterBy.sort)
+        sort = filterBy.sort ? JSON.parse(filterBy.sort) : null
     } catch (error) {
         console.error('Invalid JSON in filterBy.sort:', error)
         sort = null
-    }
+    }    
 
     if (filterBy.text) {
         const regExp = new RegExp(filterBy.text, 'i')
@@ -63,7 +63,7 @@ function remove(bugID, user) {
     const bugIDx = bugs.findIndex(bug => bug._id === bugID)
     if (bugIDx < 0) return Promise.reject('Cannot find bug - ' + bugID)
 
-    if (bugs[bugIDx].owner._id !== user._id && !user.isAdmin) {
+    if (bugs[bugIDx].owner && bugs[bugIDx].owner._id !== user._id && !user.isAdmin) {
         return Promise.reject('Not authorized to delete this bug')
     }
 

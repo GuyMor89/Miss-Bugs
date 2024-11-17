@@ -87,6 +87,7 @@ export function BugIndex() {
         const description = prompt('New Description?') || bug.description
 
         const bugToSave = { ...bug, severity, description }
+        console.log(bugToSave)
         bugService
             .save(bugToSave)
             .then((savedBug) => {
@@ -111,7 +112,7 @@ export function BugIndex() {
 
     const { startNum, endNum } = handlePageNumbers()
     const { severity, title, createdAt } = filterBy.sort
-    
+
     return (
         <main>
             <section className='info-actions'>
