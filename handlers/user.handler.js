@@ -1,12 +1,12 @@
 import fs from 'fs'
 import Cryptr from 'cryptr'
 
-import { utilService } from './util.service.js'
+import { utilHandler } from './util.handler.js'
 
 const cryptr = new Cryptr(process.env.SECRET1 || 'secret-password-key')
-let users = utilService.readJsonFile('data/user.json')
+let users = utilHandler.readJsonFile('data/user.json')
 
-export const userService = {
+export const userHandler = {
 	query,
 	getById,
 	remove,
@@ -41,7 +41,7 @@ function remove(userId) {
 }
 
 function save(user) {
-	user._id = utilService.makeId()
+	user._id = utilHandler.makeId()
 	users.push(user)
 
 	return _saveUsersToFile()

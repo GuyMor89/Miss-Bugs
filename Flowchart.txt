@@ -89,3 +89,21 @@ function validateToken(token) {
 5.) server.js
 
 > Returns the decrypted user object to AppHeader.jsx
+
+{
+    "_id": "abc123",
+    "createdAt": 1542107359454,
+    "updatedAt": 1731848610068,
+    "title": "Infinite Loop Detected",
+    "severity": 10,
+    "description": "The program enters an infinite loop and fails to terminate.",
+    "labels": [
+        "critical",
+        "bug",
+        "in-progress"
+    ],
+    "owner": {
+        "fullname": "Admin",
+        "_id": "u101"
+    }
+}

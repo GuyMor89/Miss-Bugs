@@ -1,33 +1,27 @@
 import { bugService } from '../services/bug.service.js'
-import { userService } from '../services/user.service.js'
+import { bugActions } from '../store/actions/bug.actions.js'
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
 import { BugList } from '../cmps/BugList.jsx'
+import { CHANGE_FILTER_BY } from '../store/reducers/bug.reducer.js'
 
 const { useState, useEffect } = React
+const { useSelector, useDispatch } = ReactRedux
 
 export function BugIndex() {
 
-    const [bugs, setBugs] = useState(null)
-    const [amountOfBugs, setAmountOfBugs] = useState(null)
-    const [filterBy, setFilterBy] = useState({ text: '', minSeverity: 0, page: 0, sort: { severity: '', title: '', createdAt: '' } })
-    const [user, setUser] = useState(null)
+    const dispatch = useDispatch()
 
-    useEffect(() => {
-        userService.getLoggedinUser()
-            .then(setUser)
-    }, [])
+    const bugs = useSelector(storeState => storeState.bugModule.bugs)
+    const amountOfBugs = useSelector(storeState => storeState.bugModule.amountOfBugs)
+    const filterBy = useSelector(storeState => storeState.bugModule.filterBy)
+    const user = useSelector(storeState => storeState.userModule.loggedInUser)
 
     useEffect(() => {
         loadBugs()
     }, [filterBy])
 
     function loadBugs() {
-        bugService.query(filterBy)
-            .then(result => {
-                const { filteredBugs, amountOfBugs } = result
-                setBugs(filteredBugs)
-                setAmountOfBugs(amountOfBugs)
-            })
+        bugActions.loadBugs(filterBy)
     }
 
     function filterBugs(event) {
@@ -36,17 +30,13 @@ export function BugIndex() {
         const searchValue = form.search.value
         const minSeverity = form['min-severity'].value
 
-        setFilterBy({ ...filterBy, text: searchValue, minSeverity: minSeverity })
+        dispatch({ type: CHANGE_FILTER_BY, filterBy: { text: searchValue, minSeverity: minSeverity } })
     }
 
     function onRemoveBug(bugID) {
-        bugService
-            .remove(bugID)
+        bugActions.removeBug(bugID)
             .then(() => {
                 console.log('Deleted Succesfully!')
-                const bugsToUpdate = bugs.filter((bug) => bug._id !== bugID)
-                // setBugs(bugsToUpdate)
-                loadBugs()
                 showSuccessMsg('Bug removed')
             })
             .catch((err) => {
@@ -68,12 +58,9 @@ export function BugIndex() {
 
         if (!bug.title || !bug.severity || !bug.description) return
 
-        bugService
-            .save(bug)
+        bugActions.saveBug(bug)
             .then((savedBug) => {
                 console.log('Added Bug', savedBug)
-                // setBugs([...bugs, savedBug])
-                loadBugs()
                 showSuccessMsg('Bug added')
             })
             .catch((err) => {
@@ -87,21 +74,19 @@ export function BugIndex() {
         const description = prompt('New Description?') || bug.description
 
         const bugToSave = { ...bug, severity, description }
-        console.log(bugToSave)
-        bugService
-            .save(bugToSave)
-            .then((savedBug) => {
-                console.log('Updated Bug:', savedBug)
-                const bugsToUpdate = bugs.map((currBug) =>
-                    currBug._id === savedBug._id ? savedBug : currBug
-                )
-                setBugs(bugsToUpdate)
+
+        bugActions.saveBug(bugToSave)
+            .then(() =>
                 showSuccessMsg('Bug updated')
-            })
+            )
             .catch((err) => {
                 console.log('Error from onEditBug ->', err)
                 showErrorMsg('Cannot update bug')
             })
+    }
+
+    function handlePageSwitching(diff) {
+        dispatch({ type: CHANGE_FILTER_BY, filterBy: { page: filterBy.page + diff } })
     }
 
     function handlePageNumbers() {
@@ -141,8 +126,8 @@ export function BugIndex() {
             </div>
             <div className='pagination'>
                 <span>{startNum} - {endNum} of {amountOfBugs}</span>
-                <i className={filterBy.page === 0 ? "fa-solid fa-angle-left faint" : "fa-solid fa-angle-left"} onClick={() => setFilterBy({ ...filterBy, page: filterBy.page - 1 })}></i>
-                <i className={endNum === amountOfBugs ? "fa-solid fa-angle-right faint" : "fa-solid fa-angle-right"} onClick={() => setFilterBy({ ...filterBy, page: filterBy.page + 1 })}></i>
+                <i className={filterBy.page === 0 ? "fa-solid fa-angle-left faint" : "fa-solid fa-angle-left"} onClick={() => handlePageSwitching(-1)}></i>
+                <i className={endNum === amountOfBugs ? "fa-solid fa-angle-right faint" : "fa-solid fa-angle-right"} onClick={() => handlePageSwitching(1)}></i>
             </div>
             <main>
                 <BugList bugs={bugs} user={user} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />

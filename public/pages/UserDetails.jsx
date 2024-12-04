@@ -1,18 +1,18 @@
 const { useState, useEffect } = React
+const { useSelector } = ReactRedux
 
-import { userService } from '../services/user.service.js'
-import { bugService } from '../services/bug.service.js'
 import { BugList } from '../cmps/BugList.jsx'
+import { userActions } from '../store/actions/user.actions.js'
+import { bugActions } from '../store/actions/bug.actions.js'
 
 export function UserDetails() {
 
-    const [user, setUser] = useState(null)
-    const [bugs, setBugs] = useState(null)
-    const [filterBy, setFilterBy] = useState({ text: '', minSeverity: 0, page: null, sort: { severity: '', title: '', createdAt: '' } })
+    const user = useSelector(storeState => storeState.userModule.loggedInUser)
+    const filterBy = useSelector(storeState => storeState.bugModule.filterBy)
+    const [ownedBugs, setOwnedBugs] = useState(null)
 
     useEffect(() => {
-        userService.getLoggedinUser()
-            .then(setUser)
+        userActions.loadLoggedInUser()
     }, [])
 
     useEffect(() => {
@@ -21,12 +21,12 @@ export function UserDetails() {
 
     function loadBugs() {
         if (!user) return
-        bugService.query(filterBy)
+        return bugActions.loadBugs(filterBy)
             .then(result => {
-                const ownedBugs = result.filteredBugs.filter(bug => bug.owner && bug.owner.fullname === user.fullname)
-                setBugs(ownedBugs)
+                setOwnedBugs(result.filter(bug => bug.owner && bug.owner.fullname === user.fullname))
             })
     }
+
 
     if (!user) return
 
@@ -37,7 +37,7 @@ export function UserDetails() {
             <h2>Name: {fullname}</h2>
             <h3>ID: {_id}</h3>
             <h3>Is Admin: {isAdmin ? 'Yes' : 'No'}</h3>
-            {bugs && bugs.length > 0 ? <BugList bugs={bugs} user={user} /> : 'You don\'t own any bugs'}
+            {ownedBugs && ownedBugs.length > 0 ? <BugList bugs={ownedBugs} user={user} /> : 'You don\'t own any bugs'}
         </div>
     )
 }

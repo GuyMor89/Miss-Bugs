@@ -1,43 +1,41 @@
 const { useState, useEffect } = React
-import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
+const { useSelector, useDispatch } = ReactRedux
 
+import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
 import { userService } from '../services/user.service.js'
 import { bugService } from '../services/bug.service.js'
 import { BugList } from '../cmps/BugList.jsx'
+import { userActions } from '../store/actions/user.actions.js'
 
 export function UserList() {
 
-    const [users, setUsers] = useState(null)
+    const users = useSelector(storeState => storeState.userModule.users)
 
     useEffect(() => {
         getUsers()
     }, [])
 
     function getUsers() {
-        userService.query()
-            .then(setUsers)
+        userActions.loadUsers()
     }
 
     function deleteUser(userID) {
-        userService.remove(userID)
-            .then(() => {
-                showSuccessMsg('User deleted')
-                getUsers()
-            })
+        userActions.removeUser(userID)
+            .then(() => showSuccessMsg('User deleted'))
             .catch(() => showErrorMsg('Cannot delete user with bugs'))
-    }
+}
 
-    if (!users) return <div>Loading..</div>
+if (!users) return <div>Loading..</div>
 
-    return (
-        <section className='user-list'>
-            {users.map(user => {
-                return <div>
-                    <h3>{user.fullname}</h3>
-                    <h4>{user._id}</h4>
-                    <button onClick={() => deleteUser(user._id)}>Delete</button>
-                </div>
-            })}
-        </section>
-    )
+return (
+    <section className='user-list'>
+        {users.map(user => {
+            return <div>
+                <h3>{user.fullname}</h3>
+                <h4>{user._id}</h4>
+                <button onClick={() => deleteUser(user._id)}>Delete</button>
+            </div>
+        })}
+    </section>
+)
 }

@@ -1,48 +1,39 @@
 const { Link, NavLink } = ReactRouterDOM
-const { useNavigate } = ReactRouter
+const { useSelector } = ReactRedux
 
 const { useState, useEffect } = React
 
-import { LoginSignup} from './LoginSignup.jsx'
-import { userService } from '../services/user.service.js'
+import { LoginSignup } from './LoginSignup.jsx'
+import { userActions } from '../store/actions/user.actions.js'
 
 export function AppHeader() {
 
-    const navigate = useNavigate()
-	const [user, setUser] = useState(null)
-        
-    useEffect(() => {
-		userService.getLoggedinUser()
-			.then(setUser)
+	const user = useSelector(storeState => storeState.userModule.loggedInUser)
+
+	useEffect(() => {
+		userActions.loadLoggedInUser()
 	}, [])
 
 	function onLogout() {
-		userService.logout()
-            .then(() => onSetUser(null))
-            // .catch(err => showErrorMsg('OOPs try again'))
+		userActions.logoutUser()
 	}
 
-	function onSetUser(user) {
-		setUser(user)
-        navigate('/')
-	}
-
-    return (
-        <header className='header'>
-            <nav>
-                <NavLink to="/">Home</NavLink> 
-                <NavLink to="/bug">Bugs</NavLink>
-                {user && user.isAdmin && <NavLink to="/users">Users</NavLink>}
-                <NavLink to="/about">About</NavLink>
-            </nav>
-            {user ? (
+	return (
+		<header className='header'>
+			<nav>
+				<NavLink to="/">Home</NavLink>
+				<NavLink to="/bug">Bugs</NavLink>
+				{user && user.isAdmin && <NavLink to="/users">Users</NavLink>}
+				<NavLink to="/about">About</NavLink>
+			</nav>
+			{user ? (
 				<section>
 					<Link to={`/user/${user._id}`}>Hello {user.fullname}</Link>
 					<button onClick={onLogout}>Logout</button>
 				</section>
 			) : (
-					<LoginSignup onSetUser={onSetUser} />
+				<LoginSignup />
 			)}
-        </header>
-    )
+		</header>
+	)
 }

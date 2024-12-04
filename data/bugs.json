@@ -2,9 +2,9 @@
     {
         "_id": "zHLwL",
         "createdAt": 1731756011463,
-        "updatedAt": 1731756011463,
+        "updatedAt": 1733176460434,
         "title": "Mr. Dandy's Second Bug",
-        "severity": 77,
+        "severity": 67,
         "description": "He has another one now",
         "owner": {
             "fullname": "Mr. Dandy",

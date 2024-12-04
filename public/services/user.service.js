@@ -13,32 +13,23 @@ export const userService = {
 }
 
 function query() {
-    return axios.get('/api/user').then(res => res.data)
+    return axios.get('/api/user')
+        .then(res => res.data)
 }
 
 function login({ username, password }) {
     return axios.post('/api/auth/login', { username, password })
         .then(res => res.data)
-        .then(user => {
-            // _setLoggedinUser(user)
-            return user
-        })
 }
 
 function signup({ username, password, fullname }) {
     return axios.post('/api/auth/signup', { username, password, fullname })
         .then(res => res.data)
-        .then(user => {
-            // _setLoggedinUser(user)
-            return user
-        })
 }
 
 function logout() {
     return axios.post('/api/auth/logout')
-        .then(() => {
-            // sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
-        })
+        .then(res => res.data)
 }
 
 function getLoggedinUser() {

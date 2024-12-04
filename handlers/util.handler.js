@@ -2,7 +2,7 @@ import fs from 'fs'
 import http from 'http'
 import https from 'https'
 
-export const utilService = {
+export const utilHandler = {
     readJsonFile,
     download,
     httpGet,

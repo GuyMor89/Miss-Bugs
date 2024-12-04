@@ -1,12 +1,12 @@
 import fs from 'fs'
 import PDFDocument from 'pdfkit-table'
 
-import { utilService } from './util.service.js'
+import { utilHandler } from './util.handler.js'
 
-const bugs = utilService.readJsonFile('data/bugs.json')
+const bugs = utilHandler.readJsonFile('data/bugs.json')
 const PAGE_SIZE = 4
 
-export const bugService = {
+export const bugHandler = {
     query,
     getById,
     remove,
@@ -97,7 +97,7 @@ function save(data, user) {
 
     } else {
         bugToSave = {
-            _id: utilService.makeId(),
+            _id: utilHandler.makeId(),
             createdAt: Date.now(),
             updatedAt: Date.now(),
             title: data.title,

@@ -1,0 +1,79 @@
+How to Log in:
+
+1.) [LoginSignup.jsx]: 
+
+function login(credentials) {
+        userActions.loginUser(credentials)
+            .then(() => { showSuccessMsg('Logged in successfully') })
+            .catch((err) => { showErrorMsg('Oops try again') })
+    }
+
+2.) [user.actions.js]:
+
+function loginUser(credentials) {
+    return userService.login(credentials)
+        .then(user => {
+            store.dispatch({ type: SET_USER, user })
+        })
+        .catch(err => {
+            console.error('Failed to load logged-in user:', err)
+        })
+}
+
+3.) [user.service.js]:
+
+function login({ username, password }) {
+    return axios.post('/api/auth/login', { username, password })
+        .then(res => res.data)
+}
+
+4.) [server.js]:
+
+app.post('/api/auth/login', (req, res) => {
+    userHandler.checkLogin(req.body)
+        .then(user => {
+            if (user) {
+                const loginToken = userHandler.getLoginToken(user)
+                res.cookie('loginToken', loginToken)
+                res.send(user)
+            } else {
+                res.status(404).send('Invalid Credentials')
+            }
+        })
+})
+
+5.) [user.handler.js]:
+
+function checkLogin({ username, password }) {
+	var user = users.find(user => user.username === username && user.password === password)
+	if (user) {
+		user = {
+			_id: user._id,
+			fullname: user.fullname,
+			isAdmin: user.isAdmin,
+		}
+	}
+	return Promise.resolve(user)
+}
+
+function getLoginToken(user) {
+	const str = JSON.stringify(user)
+	const encryptedStr = cryptr.encrypt(str)
+	return encryptedStr
+}
+
+6.) [user.reducer.js]:
+
+function userReducer(state = initialState, action) {
+    switch (action.type) {
+
+        case SET_USER:
+            return {
+                ...state,
+                loggedInUser: action.user
+            }
+}
+
+7.) [AppHeader.jsx]:
+
+const user = useSelector(storeState => storeState.userModule.loggedInUser)

@@ -1,9 +1,12 @@
 const { useNavigate, useLocation } = ReactRouterDOM
 const { useState, useEffect } = React
+const { useSelector, useDispatch } = ReactRedux
 
 import { BugPreview } from './BugPreview.jsx'
 
-export function BugList({ bugs, user, onRemoveBug, onEditBug }) {
+export function BugList({ user, onRemoveBug, onEditBug }) {
+
+    const bugs = useSelector(storeState => storeState.bugModule.bugs)
 
     const navigate = useNavigate()
     const location = useLocation()

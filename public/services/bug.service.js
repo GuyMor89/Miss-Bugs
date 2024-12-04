@@ -1,8 +1,3 @@
-
-import { storageService } from './async-storage.service.js'
-import { utilService } from './util.service.js'
-
-const STORAGE_KEY = 'bugDB'
 const BASE_URL = '/api/bug/'
 
 export const bugService = {
@@ -12,7 +7,6 @@ export const bugService = {
     remove,
     downloadPDF
 }
-
 
 function query(filterBy) {
     return axios.get(BASE_URL, { params: filterBy })
@@ -36,7 +30,6 @@ function remove(bugID) {
 }
 
 function save(bug) {
-    console.log(bug)
     // return axios.get(BASE_URL + 'save' + `?title=${encodeURIComponent(bug.title)}&severity=${bug.severity}&_id=${bug._id || ''}&description=${bug.description}`)
     if (bug._id) {
         return axios.put(BASE_URL + bug._id, bug)
